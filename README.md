@@ -10,7 +10,7 @@ notation](http://abcnotation.com/wiki/abc:standard:v2.1).
 
 For more details about the challenge, check out the post here:
 
-  https://redd.it/---
+  https://redd.it/hje132
 
 ## Porting ##
 
