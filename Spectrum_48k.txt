@@ -1,0 +1,68 @@
+100 REM BASIC Month 5: Crisps Tunes
+110 REM http://reddit.com/r/RetroBattlestations
+120 REM written by FozzTexx
+
+130 REM Get Commander le Clef's Secret Encoder Wheel to make this easier to type in!
+140 REM   http://retrobattlestations.com/Cmdr-le-Clef/Secret-Encoder-Wheel.pdf
+
+200 REM Initialize variables
+210 DIM m(7):FOR i=1 TO 7:READ m(i):NEXT i
+220 LET shfl=0:LET rhythm=0:LET omax=4:GO SUB 910
+
+300 REM Loop through data and play song
+310 READ s$:LET sl=LEN(s$):IF sl=0 THEN STOP
+320 FOR i = 1 TO sl
+330 LET octave=4:LET duration=0.05:LET div=0:LET mult=0:LET accd=0
+340 IF i > sl THEN GO TO 800
+350 LET n$=s$(i)
+360 IF n$ = " " THEN GO TO 800
+370 IF n$ = "|" THEN GO SUB 910:GO TO 800
+380 IF n$ = "^" THEN LET accd=1:LET shfl=shfl+1:LET i=i+1:GO TO 340
+390 IF n$ = "_" THEN LET accd=1:LET shfl=shfl-1:LET i=i+1:GO TO 340
+400 IF n$ = "=" THEN LET accd=1:LET shfl=0:LET i=i+1:GO TO 340
+410 IF n$ >= "a" AND n$ <= "g" THEN LET c=CODE n$:LET c=c-32:LET n$=CHR$ c:LET octave=octave+1
+420 IF n$ >= "A" AND n$ <= "G" THEN LET c=CODE n$:LET c=c-64:LET note=m(c)
+
+500 REM Keep reading modifier after the note until there's another note
+510 LET i=i+1:IF i > sl THEN GO TO 610
+520 LET m$=S$(i)
+530 IF m$ = "," THEN LET octave=octave-1:GO TO 510
+540 IF m$ = "'" THEN LET octave=octave+1:GO TO 510
+550 IF m$ >= "0" AND m$ <= "9" THEN LET c=CODE m$:LET mult=mult*10+c-48:GO TO 510
+560 IF m$ = "/" THEN LET div=1:GO TO 510
+570 IF m$ = "<" THEN LET rhythm=1:LET rmult=0.5:GO TO 510
+580 IF m$ = ">" THEN LET rhythm=1:LET rmult=1.5:GO TO 510
+590 LET i=i-1
+
+600 REM Play note
+610 LET note = note + (octave - 4) * 12
+620 IF accd THEN LET a(note+13)=shfl:LET shfl=0
+630 LET shfl=a(note+13):LET note=note+shfl
+640 IF div and mult=0 THEN LET mult=2
+650 IF div THEN LET mult=1/mult
+660 IF NOT mult THEN LET mult=1
+670 IF rhythm THEN LET mult=mult*rmult
+680 LET duration=duration*mult
+690 LET f$="":IF shfl <> 0 THEN LET f$="#":IF shfl<0 THEN LET f$="$"
+700 PRINT n$;f$;octave;"=";mult;" ";
+710 BEEP duration,note
+720 IF rhythm THEN LET rhythm = rhythm+1:LET rmult=2-rmult:IF rhythm=3 THEN LET rhythm=0
+
+800 NEXT i
+810 GO TO 310
+
+900 REM clear all accidentals
+910 DIM a(12*omax)
+920 RETURN
+
+1000 DATA 9,11,0,2,4,5,7
+1010 DATA "G,G, | ^G,G, A,A, G,G, | G,G, ^G,G, A,2 | G,^G, A,2 E,2 | E,2 E,2 E,8"
+1020 DATA "| G,G, ^G,G, A,A, | ^G,G, =G,G, ^G,G, | A,2 G,^G, A,2 | F,2 F,2 F,2"
+1030 DATA "| F,8 | F,2 F,2 | F,2 F,2 F,G, | A,B,5 | E,2 A,2 E,2 | A,2 E,F, G,A,5"
+1040 DATA "| D,2 | E,4 ^F,2 | A,2 B,4 | A,_B, =B,2 G,2 | G,2 G,2 G,8"
+1050 DATA "| G,G, ^G,G, A,A, | ^G,G, =G,G, ^G,G, | A,2 G,^G, A,2 | E,2 E,2 E,2"
+1060 DATA "| E,8 | E,E, ^D,D, | E,2 ^F,2 ^G,2 | E,2 ^F,2 ^G,2 | A,2 ^G,2 A,2"
+1070 DATA "| B,4< C4 | B,C D2 | A,2 A,2 A,2 | D2<A,2 A,2 | B,2 C2<G,2"
+1080 DATA "| G,2 A,2 C2<G,2 | G,2 ^G,2 | A,2 ^G,2<A,2 | _B,2 =B,B, B,_B,"
+1090 DATA "| B,2 G,2 C16"
+1100 DATA ""
