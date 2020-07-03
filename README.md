@@ -24,6 +24,7 @@ See [List of Computers With On-Board BASIC](https://en.wikipedia.org/wiki/List_o
 * Add a way to include lyrics that appear as the notes play so you can sing along
 * Turn the keyboard into a piano and live play while pressing keys
 * Support more of the ABC notation
+* Chords/Polyphonic playback on machines that support it
 
 ## Typing Tips ##
 
