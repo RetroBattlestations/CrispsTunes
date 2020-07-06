@@ -40,7 +40,7 @@
 630 LET shfl=a(note+13):LET note=note+shfl
 640 IF div and mult=0 THEN LET mult=2
 650 IF div THEN LET mult=1/mult
-660 IF NOT mult THEN LET mult=1
+660 IF mult = 0 THEN LET mult=1
 670 IF rhythm THEN LET mult=mult*rmult
 680 LET duration=duration*mult
 690 LET f$="":IF shfl <> 0 THEN LET f$="#":IF shfl<0 THEN LET f$="$"
