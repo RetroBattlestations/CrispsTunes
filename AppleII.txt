@@ -1,8 +1,6 @@
 100 REM BASIC Month 5: Crisps Tunes
 110 REM http://reddit.com/r/RetroBattlestations
 120 REM written by FozzTexx
-130 REM exclamation point has been substituted for pipe,
-140 REM hyphen has been substituted for underscore
 
 200 REM Initialize variables
 210 GOSUB 2010
@@ -15,10 +13,10 @@
 310 READ S$:SL = LEN(S$):IF SL = 0 THEN END
 320 FOR I = 1 TO SL
 330 OCTAVE = 4:DUR = 0.05:DIV = 0:MULT = 0:ACCD = 0
-340 IF I > SL THEN GOTO 800
+340 IF I > SL THEN NEXT I
 350 N$ = MID$(S$,I,1)
-360 IF N$ = " " THEN GOTO 800
-370 IF N$ = "!" THEN GOSUB 910:GOTO 800
+360 IF N$ = " " THEN NEXT I
+370 IF N$ = "!" THEN GOSUB 910:NEXT I
 380 IF N$ = "^" THEN ACCD = 1:SHFL = SHFL + 1:I = I + 1:GOTO 340
 390 IF N$ = "-" THEN ACCD = 1:SHFL = SHFL - 1:I = I + 1:GOTO 340
 400 IF N$ = "=" THEN ACCD = 1:SHFL = 0:I = I + 1:GOTO 340
@@ -38,25 +36,28 @@
 
 600 REM Play note
 610 NT = NT + (OCTAVE - 4) * 12
-620 IF ACCD THEN A(NT + 13) = SHFL:SHFL = 0
-630 SHFL = A(NT + 13):NT = NT + SHFL
-640 IF DIV AND MULT = 0 THEN MULT = 2
-650 IF DIV THEN MULT = 1/MULT
-660 IF MULT = 0 THEN MULT = 1
-670 IF RHYTHM THEN MULT = MULT * RMULT
-680 DUR = DUR * MULT
-690 F$ = "":IF SHFL <> 0 THEN F$ = "#":IF SHFL<0 THEN F$ = "$"
-700 PRINT N$;F$;OCTAVE;"=";MULT;" ";
-710 PITCH = F(NT + 17)
-720 &BEEP(DUR * 200,PITCH)
-730 IF RHYTHM THEN RHYTHM = RHYTHM + 1:RMULT = 2 - RMULT:IF RHYTHM = 3 THEN RHYTHM = 0
+620 IF ACCD THEN AI = NT + 13:A(AI) = SHFL:SHFL = 0
+630 IF ACCD AND AI < A1 THEN A1 = AI
+640 IF ACCD AND AI > A2 THEN A2 = AI
+650 SHFL = A(NT + 13):NT = NT + SHFL
+660 IF DIV AND MULT = 0 THEN MULT = 2
+670 IF DIV THEN MULT = 1/MULT
+680 IF MULT = 0 THEN MULT = 1
+690 IF RHYTHM THEN MULT = MULT * RMULT
+700 DUR = DUR * MULT
+710 F$ = "":IF SHFL <> 0 THEN F$ = "#":IF SHFL<0 THEN F$ = "$"
+720 PRINT N$;F$;OCTAVE;"=";MULT;" ";
+730 PITCH = F(NT + 17)
+740 &BEEP(DUR * 200,PITCH)
+750 IF RHYTHM THEN RHYTHM = RHYTHM + 1:RMULT = 2 - RMULT:IF RHYTHM = 3 THEN RHYTHM = 0
 
 800 NEXT I
 810 GOTO 310
 
 900 REM clear all accidentals
-910 FOR AD = 1 TO 12 * OMAX:A(AD) = 0:NEXT AD
-920 RETURN
+910 FOR AD = A1 TO A2:A(AD) = 0:NEXT AD
+920 A1 = 12 * OMAX:A2 = 0
+930 RETURN
 
 1000 DATA 9,11,0,2,4,5,7
 
@@ -66,6 +67,8 @@
 1040 DATA  62, 58, 55, 52, 49, 19, 43, 14, 38, 36, 15, 32
 1050 DATA  30, 28, 26, 12, 11, -1
 
+1480 REM exclamation point has been substituted for pipe,
+1490 REM hyphen has been substituted for underscore
 1500 DATA "G,G, ! ^G,G, A,A, G,G, ! G,G, ^G,G, A,2 ! G,^G, A,2 E,2 ! E,2 E,2 E,8"
 1510 DATA "! G,G, ^G,G, A,A, ! ^G,G, =G,G, ^G,G, ! A,2 G,^G, A,2 ! F,2 F,2 F,2"
 1520 DATA "! F,8 ! F,2 F,2 ! F,2 F,2 F,G, ! A,B,5 ! E,2 A,2 E,2 ! A,2 E,F, G,A,5"
