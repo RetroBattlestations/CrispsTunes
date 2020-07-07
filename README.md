@@ -14,6 +14,14 @@ For more details about the challenge, check out the post here:
 
 ## Porting ##
 
+Before you start working on porting the program and changing things
+work on your machine, try running the Spectrum 48k version in an
+emulator (or real hardware if you are so inclined) so you can see how
+the program works and what it sounds like. The Apple II version does
+not make a good starting point because the Apple II does not have any
+built-in commands and instead uses an assembly routine and a table
+full of magic values to create the notes.
+
 The code is fairly simple and doesn't use any kind of dirty tricks but
 it may be difficult to port depending on if your computer's BASIC
 supports making sounds or if it requires some kind of assembly
