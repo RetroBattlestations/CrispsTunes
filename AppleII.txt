@@ -6,8 +6,8 @@
 210 GOSUB 2010
 220 DIM M(7):FOR I = 1 TO 7:READ M(I):NEXT I
 230 SHFL = 0:RHYTHM = 0:OMAX = 4:DIM A(12 * OMAX)
-240 DIM F(48):P = 1
-250 READ T:IF T > -1 THEN F(P) = T:P = P + 1:GOTO 250
+240 DIM MG(12 * OMAX):P = 1
+250 READ T:IF T > -1 THEN MG(P) = T:P = P + 1:GOTO 250
 
 300 REM Loop through data and play song
 310 READ S$:SL = LEN(S$):IF SL = 0 THEN END
@@ -47,9 +47,10 @@
 700 DUR = DUR * MULT
 710 F$ = "":IF SHFL <> 0 THEN F$ = "#":IF SHFL<0 THEN F$ = "$"
 720 PRINT N$;F$;OCTAVE;"=";MULT;" ";
-730 PITCH = F(NT + 17)
-740 &BEEP(DUR * 200,PITCH)
-750 IF RHYTHM THEN RHYTHM = RHYTHM + 1:RMULT = 2 - RMULT:IF RHYTHM = 3 THEN RHYTHM = 0
+730 REM Note (NT) is numeric note, 0 is middle C. Convert to BEEP magic value
+740 BVAL = MG(NT + 17)
+750 &BEEP(DUR * 200,BVAL)
+760 IF RHYTHM THEN RHYTHM = RHYTHM + 1:RMULT = 2 - RMULT:IF RHYTHM = 3 THEN RHYTHM = 0
 
 800 NEXT I
 810 GOTO 310
@@ -61,7 +62,7 @@
 
 1000 DATA 9,11,0,2,4,5,7
 
-1010 REM Pitch values of notes, starting at G below middle C
+1010 REM Magic &BEEP() values (not hertz) that sound nice, starting at G below middle C
 1020 DATA 253,242,228,215,203,191,180,170,161,151,142,135
 1030 DATA 127,119,113,106,100, 95, 89, 84, 79, 74, 70, 66
 1040 DATA  62, 58, 55, 52, 49, 19, 43, 14, 38, 36, 15, 32

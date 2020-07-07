@@ -14,7 +14,10 @@ For more details about the challenge, check out the post here:
 
 ## Porting ##
 
-The code is fairly simple and doesn't use any kind of dirty tricks it may be difficult to port depending on if your computer's BASIC supports making sounds or if it requires some kind of assembly routine.
+The code is fairly simple and doesn't use any kind of dirty tricks but
+it may be difficult to port depending on if your computer's BASIC
+supports making sounds or if it requires some kind of assembly
+routine.
 
 See [List of Computers With On-Board BASIC](https://en.wikipedia.org/wiki/List_of_Computers_With_On-Board_BASIC)
 
