@@ -22,6 +22,10 @@ not make a good starting point because the Apple II does not have any
 built-in commands and instead uses an assembly routine and a table
 full of magic values to create the notes.
 
+If your BASIC doesn't let you cheat and use the DIM command to clear
+an array like the Spectrum does then look at lines 630-640 and 900-930
+in the Apple II version for an alternative method.
+
 The code is fairly simple and doesn't use any kind of dirty tricks but
 it may be difficult to port depending on if your computer's BASIC
 supports making sounds or if it requires some kind of assembly
