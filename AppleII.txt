@@ -2,6 +2,9 @@
 110 REM http://reddit.com/r/RetroBattlestations
 120 REM written by FozzTexx
 
+130 REM If your BASIC has built-in sound/music commands, use the
+140 REM Spectrum version as a starting point, not the Apple II version.
+
 200 REM Initialize variables
 210 GOSUB 2010
 220 DIM M(7):FOR I = 1 TO 7:READ M(I):NEXT I
