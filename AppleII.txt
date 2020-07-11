@@ -24,14 +24,14 @@
 390 IF N$ = "-" THEN ACCD = 1:SHFL = SHFL - 1:I = I + 1:GOTO 340
 400 IF N$ = "=" THEN ACCD = 1:SHFL = 0:I = I + 1:GOTO 340
 410 IF N$ >= CHR$(97) AND N$ <= CHR$(103) THEN N$ = CHR$(ASC(N$) - 32):OCTAVE = OCTAVE + 1
-420 IF N$ > =  "A" AND N$ < =  "G" THEN C = ASC(N$):C = C - 64:NT = M(C)
+420 IF N$ >= "A" AND N$ <= "G" THEN C = ASC(N$):C = C - 64:NT = M(C)
 
 500 REM Keep reading modifier after the note until there's another note
 510 I = I + 1:IF I > SL THEN GOTO 610
 520 M$ = MID$(S$,I,1)
 530 IF M$ = "," THEN OCTAVE = OCTAVE - 1:GOTO 510
 540 IF M$ = "'" THEN OCTAVE = OCTAVE + 1:GOTO 510
-550 IF M$ > =  "0" AND M$ < =  "9" THEN C = ASC(M$):MULT = MULT * 10 + C - 48:GOTO 510
+550 IF M$ >= "0" AND M$ <= "9" THEN C = ASC(M$):MULT = MULT * 10 + C - 48:GOTO 510
 560 IF M$ = "/" THEN DIV = 1:GOTO 510
 570 IF M$ = "<" THEN RHYTHM = 1:RMULT = 0.5:GOTO 510
 580 IF M$ = ">" THEN RHYTHM = 1:RMULT = 1.5:GOTO 510
