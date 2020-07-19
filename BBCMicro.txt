@@ -1,0 +1,83 @@
+100 REM BASIC Month 5: Crisps Tunes
+110 REM http://reddit.com/r/RetroBattlestations
+120 REM written by FozzTexx
+
+200 REM Initialize variables
+210 DIM MAP(7):FOR I = 1 TO 7:READ V:MAP(I) = V:NEXT I
+220 SHFL = 0:RHYTHM = 0:OMAX = 6:DIM A(12 * OMAX):AI=0:A1=1:A2=12 * OMAX:GOSUB 910
+230 DIM S$(80):DIM N$(1):DIM M$(1):DIM M(12 * OMAX):P = 1
+240 READ T:IF T > -1 THEN M(P) = T:P = P + 1:GOTO 240
+250 MAGFIRST = -14
+
+300 REM Loop through data and play song
+310 READ S$:SL = LEN(S$):IF SL = 0 THEN END
+320 FOR I = 1 TO SL
+330 OCTAVE = 4:DURATION = 2.5:DVSR = 0:MULT = 0:ACCD = 0
+340 IF I > SL THEN NEXT I
+350 N$ = MID$(S$,I,1)
+360 IF N$ = " " THEN NEXT I
+370 IF N$ = "|" THEN GOSUB 910:NEXT I
+380 IF N$ = "^" THEN ACCD = 1:SHFL = SHFL + 1:I = I + 1:GOTO 340
+390 IF N$ = "_" THEN ACCD = 1:SHFL = SHFL - 1:I = I + 1:GOTO 340
+400 IF N$ = "=" THEN ACCD = 1:SHFL = 0:I = I + 1:GOTO 340
+410 IF N$ >= CHR$(97) AND N$ <= CHR$(103) THEN N$ = CHR$(ASC(N$) - 32):OCTAVE = OCTAVE + 1
+420 IF N$ >= "A" AND N$ <= "G" THEN C = ASC(N$):C = C - 64:NT = MAP(C)
+
+500 REM Keep reading modifier after the note until there's another note
+510 I = I + 1:IF I > SL THEN GOTO 610
+520 M$ = MID$(S$,I,1)
+530 IF M$ = "," THEN OCTAVE = OCTAVE - 1:GOTO 510
+540 IF M$ = "'" THEN OCTAVE = OCTAVE + 1:GOTO 510
+550 IF M$ >= "0" AND M$ <= "9" THEN C = ASC(M$):MULT = MULT * 10 + C - 48:GOTO 510
+560 IF M$ = "/" THEN DVSR = 1:GOTO 510
+570 IF M$ = "<" THEN RHYTHM = 1:RMULT = 0.5:GOTO 510
+580 IF M$ = ">" THEN RHYTHM = 1:RMULT = 1.5:GOTO 510
+590 I = I - 1
+
+600 REM Play note
+610 NT = NT + (OCTAVE - 3) * 12
+620 IF ACCD THEN AI = NT - MAGFIRST:A(AI) = SHFL:SHFL = 0
+630 IF ACCD AND AI < A1 THEN A1 = AI
+640 IF ACCD AND AI > A2 THEN A2 = AI
+650 SHFL = A(NT - MAGFIRST):NT = NT + SHFL
+660 IF DVSR AND MULT = 0 THEN MULT = 2
+670 IF DVSR THEN MULT = 1/MULT
+680 IF MULT = 0 THEN MULT = 1
+690 IF RHYTHM THEN MULT = MULT * RMULT
+700 DURATION = DURATION * MULT
+710 M$ = "":IF SHFL <> 0 THEN M$ = "#":IF SHFL<0 THEN M$ = "$"
+720 PRINT N$;M$;OCTAVE;"=";MULT;" ";
+730 REM Note (NT) is numeric note, 0 is middle C. Convert to SOUND magic value
+740 SOUND 1,50,M(NT - MAGFIRST),DURATION
+750 SOUND 1,0,0,1
+760 IF RHYTHM THEN RHYTHM = RHYTHM + 1:RMULT = 2 - RMULT:IF RHYTHM = 3 THEN RHYTHM = 0
+
+800 NEXT I
+810 GOTO 310
+
+900 REM clear all accidentals
+910 FOR AD = A1 TO A2:A(AD) = 0:NEXT AD
+920 A1 = 12 * OMAX:A2 = 0
+930 RETURN
+
+1000 DATA 9,11,0,2,4,5,7
+
+1010 REM Magic SOUND values (not hertz) that sound nice, starting at A sharp
+1020 DATA   0,  1,  5,  9, 13, 17, 21, 25, 29, 33, 37, 41
+1030 DATA  45, 49, 53, 57, 61, 65, 69, 73, 77, 81, 85, 89
+1040 DATA  93, 97,101,105,109,113,117,121,125,129,133,137
+1050 DATA 141,145,149,153,157,161,165,169,173,177,181,185
+1060 DATA 189,193,197,201,205,209,213,217,221,225,229,233
+1070 DATA 237,241,245,249,253,-1
+
+1500 DATA "G,G, | ^G,G, A,A, G,G, | G,G, ^G,G, A,2 | G,^G, A,2 E,2 | E,2 E,2 E,8"
+1510 DATA "| G,G, ^G,G, A,A, | ^G,G, =G,G, ^G,G, | A,2 G,^G, A,2 | F,2 F,2 F,2"
+1520 DATA "| F,8 | F,2 F,2 | F,2 F,2 F,G, | A,B,5 | E,2 A,2 E,2 | A,2 E,F, G,A,5"
+1530 DATA "| D,2 | E,4 ^F,2 | A,2 B,4 | A,_B, =B,2 G,2 | G,2 G,2 G,8"
+1540 DATA "| G,G, ^G,G, A,A, | ^G,G, =G,G, ^G,G, | A,2 G,^G, A,2 | E,2 E,2 E,2"
+1550 DATA "| E,8 | E,E, ^D,D, | E,2 ^F,2 ^G,2 | E,2 ^F,2 ^G,2 | A,2 ^G,2 A,2"
+1560 DATA "| B,4< C4 | B,C D2 | A,2 A,2 A,2 | D2<A,2 A,2 | B,2 C2<G,2"
+1570 DATA "| G,2 A,2 C2<G,2 | G,2 ^G,2 | A,2 ^G,2<A,2 | _B,2 =B,B, B,_B,"
+1580 DATA "| B,2 G,2 C16"
+1590 DATA ""
+
